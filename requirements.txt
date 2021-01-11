@@ -1,0 +1,9 @@
+chess
+chessmate
+tqdm
+matplotlib
+pytest
+jupyterlab
+tensorflow
+keras
+sklearn
