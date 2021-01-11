@@ -15,12 +15,16 @@ class HighestValueCNN(BaseEngine):
     """ Engine that prioritizes capturing the highest value piece if
     the option presents itself, uses a neural network to choose between equally valued moves"""
 
-    def __init__(self):
+    def __init__(self, color: Union[chess.Color, bool]):
         """ See parent docstring """
         super().__init__()
         self.name = "Capture Highest Value, prioritized with NN"
-        self.start_nn = keras.models.load_model('./data/start_white')
-        self.end_nn = keras.models.load_model('./data/end_white')
+        if color:
+            self.start_nn = keras.models.load_model('./data/start_white')
+            self.end_nn = keras.models.load_model('./data/end_white')
+        else:
+            self.start_nn = keras.models.load_model('./data/start_black')
+            self.end_nn = keras.models.load_model('./data/end_black')
 
     def evaluate(self, board: chess.Board) -> None:
         """ Assigns highest value to capture moves based off value system """
@@ -35,11 +39,11 @@ class HighestValueCNN(BaseEngine):
             piece_at_position = get_piece_at(board, str(m)[2:4]).upper()
 
             if (not board.is_capture(m)) or (not piece_at_position):
-                self.legal_moves[m] = 0.0 + s_array[move_index(str(m)[0:2])] #+ (e_array[move_index(str(m)[2:4])])
+                self.legal_moves[m] = 0.0 + s_array[move_index(str(m)[0:2])] #+ e_array[move_index(str(m)[2:4])]
             else:
                 self.legal_moves[m] = self.value_mapping[
                     piece_at_position
-                ].value + s_array[move_index(str(m)[0:2])]
+                ].value + s_array[move_index(str(m)[0:2])] #+ e_array[move_index(str(m)[2:4])]
 
         self.material_difference.append(
             self.evaluation_function.evaluate(board)
@@ -70,12 +74,16 @@ class HighestValueCNN(BaseEngine):
 class CNN(BaseEngine):
     """ Uses a CNN to choose next move """
 
-    def __init__(self):
+    def __init__(self, color: Union[chess.Color, bool]):
         """ See parent docstring """
         super().__init__()
         self.name = "Uses a CNN to choose next move"
-        self.start_nn = keras.models.load_model('./data/start_white')
-        self.end_nn = keras.models.load_model('./data/end_white')
+        if color:
+            self.start_nn = keras.models.load_model('./data/start_white')
+            self.end_nn = keras.models.load_model('./data/end_white')
+        else:
+            self.start_nn = keras.models.load_model('./data/start_black')
+            self.end_nn = keras.models.load_model('./data/end_black')
 
     def evaluate(self, board: chess.Board) -> None:
         """ Assigns highest value to capture moves based off value system """
@@ -87,7 +95,7 @@ class CNN(BaseEngine):
 
         legal_move_list = list(board.legal_moves)
         for m in legal_move_list:
-            self.legal_moves[m] = 0.0 + s_array[move_index(str(m)[0:2])] #+ (e_array[move_index(str(m)[2:4])])
+            self.legal_moves[m] = 0.0 + s_array[move_index(str(m)[0:2])] #+ e_array[move_index(str(m)[2:4])]
 
         self.material_difference.append(
             self.evaluation_function.evaluate(board)

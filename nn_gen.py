@@ -54,13 +54,6 @@ def move_index(move_string):
     index = (ldict[move_string[0]] * 8) + (int(move_string[1]) - 1)
     return index
 
-def examine_data():
-    #Headers(Event='?', Site='?', Date='????.??.??', Round='?', White='?', Black='?', Result='*')
-    while 1 == 1:
-        game = chess.pgn.read_game(pgn)
-        x = 1
-        print("Event='{}', Site='{}', Date='{}', Round='{}', White='{}', Black='{}', Result='{}'".format(game.headers["Event"], game.headers["Site"], game.headers["Date"], game.headers["Round"], game.headers["White"], game.headers["Black"], game.headers["Result"]))
-
 def generate_data(white=True, sample_size=60000):
     X = np.ndarray(shape=(sample_size, 8, 8, 12))
     Y = np.ndarray(shape=(sample_size, 64))
@@ -127,10 +120,14 @@ def gen_model(train_X, train_Y, directory):
 
 
 if __name__ == "__main__":
+    #generate CNN models
+    train_X, train_Y , train_Z = generate_data(white=False)
+    gen_model(train_X, train_Y, './data/start_black') #loss: 2.7354 - accuracy: 0.2868 - val_loss: 2.6580 - val_accuracy: 0.3152
+    gen_model(train_X, train_Z, './data/end_black') #loss: 1.9485 - accuracy: 0.4840 - val_loss: 1.7304 - val_accuracy: 0.5268
 
-    #examine_data()
-    train_X, train_Y , train_Z = generate_data()
-    gen_model(train_X, train_Y, './data/start_white')
-    gen_model(train_X, train_Z, './data/end_white')
+    train_X, train_Y , train_Z = generate_data(white=True)
+    gen_model(train_X, train_Y, './data/start_white') #loss: 2.6949 - accuracy: 0.2977 - val_loss: 2.6313 - val_accuracy: 0.3184
+    gen_model(train_X, train_Z, './data/end_white') #loss: 1.9600 - accuracy: 0.4830 - val_loss: 1.7420 - val_accuracy: 0.5261
+
 
 
