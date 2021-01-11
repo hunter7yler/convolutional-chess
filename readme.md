@@ -2,11 +2,7 @@
 
 This project tests the efficacy of Convolutional Neural Networks (CNNs) in Chess AIs.
 
-##Install and setup
-
-
-
-### Prerequisites
+### Setup
 
 This project uses Python 3. All other dependencies are listed in requirements.txt. To get a virtualenv set up for this project, run the following three commands from the nn_chess directory:
 
