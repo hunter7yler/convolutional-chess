@@ -2,7 +2,7 @@
 board evaluation """
 
 from typing import Dict, List
-import chess  # type: ignore
+import chess
 
 from chessmate.constants.piece_values import ConventionalPieceValues
 from tensorflow import keras
