@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 ### CNN Training
 
-Replace the sample file nn_chess/data/data.pgn with any data you like. I recommend a year's worth of data from the [FICS Games Database](https://www.ficsgames.org/download.html). 
+Replace the sample file nn_chess/data/data.pgn with any pgn you like. I recommend a year's worth of data from the [FICS Games Database](https://www.ficsgames.org/download.html). 
 
 Now you can train your CNN by executing the following: 
 ```

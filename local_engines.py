@@ -1,43 +1,15 @@
 """
 Collection of local chess engines designed to test effectiveness of neural networks
 """
-import random
 from typing import Dict, List, Union
-
 import chess  # type: ignore
 import chess.pgn  # type: ignore
-
-from chessmate.analysis import StandardEvaluation
-from chessmate.constants.piece_values import ConventionalPieceValues
-from chessmate.heuristics import MVV_LVA
-from chessmate.transpositions import TranspositionTable, zobrist_hash_function
 from chessmate.utils import get_piece_at
 from chessmate.engines import BaseEngine
 from nn_gen import board_convert
 from nn_gen import move_index
-
 import numpy as np
 from tensorflow import keras
-
-
-# def nn9white_player(board):  # note that "player" receives the board
-#     moves = [str(x) for x in list(board.legal_moves)] #string rep
-#     bint = np.ndarray(shape=(1, 8, 8, 12))
-#     bint[0] = board_convert(str(board))
-#     s_array, e_array = w_start(bint).numpy()[0], w_end(bint).numpy()[0]
-#     scored = []
-#     for move in moves:
-#         newboard = board.copy()
-#         newboard.push_uci(move)
-#         if newboard.is_checkmate():
-#             return move
-#         start = move[0:2]
-#         end = move[2:4]
-#         score = (e_array[move_index(end)]) #s_array[move_index(start)] #+
-#         scored.append([score, move])
-#     scored.sort(reverse=True)
-#     choice = scored[0][1]
-#     return choice
 
 class HighestValueCNN(BaseEngine):
     """ Engine that prioritizes capturing the highest value piece if
