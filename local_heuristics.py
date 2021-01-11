@@ -1,12 +1,10 @@
-""" Collection of heuristic related evaluation - move sorting,
+""" Local collection of heuristic related evaluation - move sorting,
 board evaluation """
-import random
+
 from typing import Dict, List
-import time
 import chess  # type: ignore
 
 from chessmate.constants.piece_values import ConventionalPieceValues
-from chessmate.utils import get_piece_at
 from tensorflow import keras
 import numpy as np
 from nn_gen import board_convert
@@ -17,14 +15,7 @@ w_end = keras.models.load_model('./data/end_white')
 
 def NNP(board: chess.Board, piece_values: Dict[str, int] = ConventionalPieceValues) -> List[chess.Move]:
     """
-    Most Valuable Victim - Least Valuable Aggressor implementation for
-    move sorting
-
-    Args:
-        board (chess.Board): current board state to evaluate
-    Returns:
-        (List[chess.Move]): sorted list of moves according to MVV_LVA capture
-            heuristic
+    Neural Net Priority - sort moves based on CNN
     """
     available_captures: Dict[int, List[chess.Move]] = {}
     move_list = list(board.legal_moves)
