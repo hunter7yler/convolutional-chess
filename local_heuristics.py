@@ -12,6 +12,9 @@ from nn_gen import move_index
 
 w_start = keras.models.load_model('./data/start_white')
 w_end = keras.models.load_model('./data/end_white')
+b_start = keras.models.load_model('./data/start_black')
+b_end = keras.models.load_model('./data/end_black')
+
 
 def NNP(board: chess.Board, piece_values: Dict[str, int] = ConventionalPieceValues) -> List[chess.Move]:
     """
@@ -21,12 +24,16 @@ def NNP(board: chess.Board, piece_values: Dict[str, int] = ConventionalPieceValu
     move_list = list(board.legal_moves)
     bint = np.ndarray(shape=(1, 8, 8, 12))
     bint[0] = board_convert(str(board))
-    s_array, e_array = w_start(bint).numpy()[0], w_end(bint).numpy()[0]
+    if chess.Color:
+        s_array, e_array = w_start(bint).numpy()[0], w_end(bint).numpy()[0]
+    else:
+        s_array, e_array = b_start(bint).numpy()[0], b_end(bint).numpy()[0]
+
 
     for move in move_list:
         start = str(move)[:2]
         end = str(move)[2:]
-        value_diff = (e_array[move_index(end)]) + s_array[move_index(start)]
+        value_diff = (e_array[move_index(end)] + s_array[move_index(start)])
         if value_diff not in available_captures:
             available_captures[value_diff] = [move]
         else:
